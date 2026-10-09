@@ -5,7 +5,7 @@
 # =============================================================================
 spring:
   datasource:
-    password: ${DB_PASSWORD:Linux14235.6}
+    password: ${DB_PASSWORD:}
 
 app:
   seguridad:
