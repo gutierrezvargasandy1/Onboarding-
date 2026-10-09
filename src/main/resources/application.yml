@@ -1,0 +1,101 @@
+# =============================================================================
+# Configuración común. Los secretos NUNCA van aquí: llegan por variables de
+# entorno (DB_PASSWORD, JWT_SECRET...). Ver .env.example y README.
+# Perfiles: dev (por omisión en local), prod, test (pruebas automatizadas).
+# =============================================================================
+spring:
+  application:
+    name: banco-onboarding
+  profiles:
+    default: dev
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:6543/postgres?prepareThreshold=0}
+    username: ${DB_USER:postgres.lwijktdslhniieauvwka}
+    password: ${DB_PASSWORD:}
+    hikari:
+      pool-name: banco-pool
+      maximum-pool-size: ${DB_POOL_MAX:10}
+
+  jpa:
+    open-in-view: false            # nada de consultas perezosas fuera de la transacción
+    hibernate:
+      ddl-auto: validate           # Hibernate solo verifica; el esquema lo crea Flyway / schema.sql
+    properties:
+      hibernate:
+        default_schema: onboarding
+        default_batch_fetch_size: 50
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    enabled: true
+    schemas: onboarding
+    default-schema: onboarding
+    # Si la base ya se creó con database/schema.sql (que equivale a V1..V3),
+    # Flyway la registra como versión 3 en lugar de fallar.
+    baseline-on-migrate: true
+    baseline-version: 3
+
+  data:
+    web:
+      pageable:
+        default-page-size: 20
+        max-page-size: 100
+
+server:
+  port: ${PORT:8080}
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    nombre: Banco - Onboarding de clientes
+    version: "@project.version@"
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    persist-authorization: true
+  default-produces-media-type: application/json
+
+logging:
+  pattern:
+    level: "%5p [%X{requestId:-}]"
+
+# -----------------------------------------------------------------------------
+# Propiedades de la aplicación (validadas al arrancar: si algo falta, no arranca)
+# -----------------------------------------------------------------------------
+app:
+  cuenta:
+    saldo-inicial: ${SALDO_INICIAL:1000.00}   # saldo de apertura definido por el sistema (>= 0)
+    moneda: MXN
+  seguridad:
+    bcrypt-fuerza: 12                         # costo BCrypt (2^12 iteraciones)
+    jwt:
+      secreto: ${JWT_SECRET:}                 # mínimo 32 caracteres; obligatorio
+      emisor: banco-onboarding
+      audiencia: banco-onboarding-api
+      expiracion: ${JWT_EXPIRACION:60m}
+    login:
+      max-intentos: 5                         # intentos fallidos antes de bloquear
+      bloqueo: 15m
+    cors:
+      origenes-permitidos: ${CORS_ORIGENES:}

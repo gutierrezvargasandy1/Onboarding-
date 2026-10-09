@@ -1,0 +1,20 @@
+# =============================================================================
+# Perfil dev: desarrollo local. Se activa solo si no se indica otro perfil.
+# Si tu usuario de PostgreSQL tiene otra contraseña, define DB_PASSWORD
+# (o cámbiala aquí, solo en tu máquina).
+# =============================================================================
+spring:
+  datasource:
+    password: ${DB_PASSWORD:Linux14235.6}
+
+app:
+  seguridad:
+    jwt:
+      # Secreto SOLO para desarrollo local. En producción se define JWT_SECRET.
+      secreto: ${JWT_SECRET:dev-solo-local-no-usar-en-produccion-2026}
+    cors:
+      origenes-permitidos: ${CORS_ORIGENES:http://localhost:3000,http://localhost:5173}
+
+logging:
+  level:
+    com.example.banco: DEBUG

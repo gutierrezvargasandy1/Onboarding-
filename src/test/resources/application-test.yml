@@ -1,0 +1,17 @@
+# Perfil de pruebas: PostgreSQL embebido (la URL la pone PruebaIntegracion),
+# BCrypt de costo mínimo para que las pruebas sean rápidas y secreto de prueba.
+app:
+  cuenta:
+    saldo-inicial: 1000.00
+  seguridad:
+    bcrypt-fuerza: 4
+    jwt:
+      secreto: secreto-solo-para-pruebas-automatizadas-0123456789
+    login:
+      max-intentos: 3
+      bloqueo: 10m
+
+logging:
+  level:
+    root: WARN
+    com.example.banco: INFO

@@ -1,0 +1,22 @@
+# Compilación
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+bin/
+out/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Secretos locales: nunca se suben al repositorio
+.env
+*.log

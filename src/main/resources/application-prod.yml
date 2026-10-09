@@ -1,0 +1,28 @@
+# =============================================================================
+# Perfil prod. Activar con SPRING_PROFILES_ACTIVE=prod.
+# Variables obligatorias: DB_URL, DB_USER, DB_PASSWORD, JWT_SECRET.
+# Recomendado: la app se conecta con un usuario del rol rol_app_onboarding (sin
+# DELETE) y Flyway migra con el dueño del esquema:
+#   SPRING_FLYWAY_USER / SPRING_FLYWAY_PASSWORD
+# =============================================================================
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+server:
+  forward-headers-strategy: framework   # detrás de un balanceador/proxy con TLS
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+logging:
+  structured:
+    format:
+      console: ecs                      # logs en JSON para el agregador de logs
+  level:
+    root: INFO
