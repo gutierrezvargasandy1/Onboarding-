@@ -20,7 +20,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.web.ErrorResponse;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -102,15 +101,6 @@ public class GlobalExceptionHandler {
 
     // --------------------------------------------------------------- validación
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<RespuestaError> cuerpoInvalido(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        List<ErrorCampo> errores = new ArrayList<>();
-        ex.getBindingResult().getFieldErrors()
-                .forEach(error -> errores.add(new ErrorCampo(error.getField(), error.getDefaultMessage())));
-        ex.getBindingResult().getGlobalErrors()
-                .forEach(error -> errores.add(new ErrorCampo(error.getObjectName(), error.getDefaultMessage())));
-        return errorValidacion(errores, request);
-    }
 
     /**
      * Validación de métodos: ocurre cuando el método del controlador tiene una restricción

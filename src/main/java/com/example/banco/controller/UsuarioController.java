@@ -5,7 +5,6 @@ import com.example.banco.dto.request.CambioPasswordRequest;
 import com.example.banco.dto.request.CrearUsuarioRequest;
 import com.example.banco.dto.response.RespuestaError;
 import com.example.banco.dto.response.UsuarioResponse;
-import com.example.banco.entity.Usuario;
 import com.example.banco.security.UsuarioAutenticado;
 import com.example.banco.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
